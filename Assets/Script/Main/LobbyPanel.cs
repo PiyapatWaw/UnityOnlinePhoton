@@ -27,6 +27,8 @@ public class LobbyPanel : MainPanel
     {
         Username.text = PlayerData.Instance.Username;
         base.Show();
+        PlayerMain.instance.gameObject.SetActive(true);
+        CameraManager.instanst.MoveCamera(CameraManager.Lobby);
     }
 
 

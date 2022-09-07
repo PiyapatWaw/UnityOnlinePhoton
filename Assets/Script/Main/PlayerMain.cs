@@ -10,6 +10,8 @@ public class PlayerMain : MonoBehaviour
     private void Awake()
     {
         instance = this;
+        gameObject.SetActive(false);
+        gameObject.transform.localScale = Vector3.one;
     }
 
     public void ChangeColor( int i, Color c)

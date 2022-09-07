@@ -21,6 +21,7 @@ public class MainPanel : MonoBehaviour
         }
         gameObject.SetActive(true);
         MainMenu.instance.ActivePanel = this;
+        CameraManager.instanst.MoveCamera(CameraManager.Apperance);
     }
 
     public virtual void Hide()
