@@ -55,7 +55,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunInstantiateMagicCall
         {
             Hashtable hash = new Hashtable()
                 {
-                    { PropertiesKey.HP.ToString(), hp }
+                    { PropertiesKey.HP, hp }
                 };
             player.SetCustomProperties(hash);
         }

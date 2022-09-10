@@ -2,6 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum RoomState
+{
+    Setup,
+    Play,
+    End
+}
+
+public enum GameMode
+{
+    FFA
+}
+
 public class GameData 
 {
     public const int PlayerLayer = 6;
@@ -15,7 +27,11 @@ public class EventCode
 
 public class PropertiesKey
 {
-    public const int HP = 0;
+    public const string ROOM_STATE = "0";
+    public const string ROOM_READY = "1";
+    public const string ROOM_GAMEMODE = "2";
+
+    public const string HP = "0";
 }
 
 public class SkinKey

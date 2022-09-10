@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class MainMenu : MonoBehaviourPunCallbacks
 {
@@ -82,28 +83,43 @@ public class MainMenu : MonoBehaviourPunCallbacks
 
     private void CreateRoom()
     {
-        Debug.LogError("CreateRoom");
+        Hashtable roomproperties = new Hashtable();
+        roomproperties[PropertiesKey.ROOM_STATE] = RoomState.Setup;
+        roomproperties[PropertiesKey.ROOM_READY] = false;
+
+        roomproperties[PropertiesKey.ROOM_GAMEMODE] = currentmatch.Mode.ToString();
+
+        RoomOptions options = new RoomOptions
+        {
+            MaxPlayers = (byte)currentmatch.MaxPlayer,
+            PlayerTtl = 0, 
+            CleanupCacheOnLeave = true, 
+            CustomRoomProperties = roomproperties,
+            PublishUserId = true,
+        };
+
+        Debug.Log("CreateRoom");
         string roomname = "Room " + PlayerData.Instance.Username;
-        PhotonNetwork.CreateRoom(roomname);
+        PhotonNetwork.CreateRoom(roomname, options, null);
     }
 
     public override void OnCreatedRoom()
     {
-        Debug.LogErrorFormat("OnCreatedRoom {0} {1}", PhotonNetwork.CurrentRoom.Name,PhotonNetwork.PlayerList.Length);
+        Debug.LogFormat("OnCreatedRoom {0} {1}", PhotonNetwork.CurrentRoom.Name,PhotonNetwork.PlayerList.Length);
         CheckPlayerFull();
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        Debug.LogErrorFormat("{0} enterroom {1} count {2}", newPlayer.NickName,PhotonNetwork.CurrentRoom.Name, PhotonNetwork.PlayerList.Length);
+        Debug.LogFormat("{0} enterroom {1} count {2}", newPlayer.NickName,PhotonNetwork.CurrentRoom.Name, PhotonNetwork.PlayerList.Length);
         CheckPlayerFull();
     }
 
     void CheckPlayerFull()
     {
-        Debug.LogErrorFormat("CountOfPlayers {0} == currentmatch.MaxPlayer {1} ? {2}", PhotonNetwork.PlayerList.Length, currentmatch.MaxPlayer, PhotonNetwork.PlayerList.Length == currentmatch.MaxPlayer);
-        LobbyPanel.UpdateRoom(PhotonNetwork.PlayerList.Length, currentmatch.MaxPlayer);
-        if(PhotonNetwork.PlayerList.Length == currentmatch.MaxPlayer)
+        Debug.LogFormat("CountOfPlayers {0} == currentmatch.MaxPlayer {1} ? {2}", PhotonNetwork.PlayerList.Length, PhotonNetwork.CurrentRoom.MaxPlayers, PhotonNetwork.PlayerList.Length == PhotonNetwork.CurrentRoom.MaxPlayers);
+        LobbyPanel.UpdateRoom(PhotonNetwork.PlayerList.Length, PhotonNetwork.CurrentRoom.MaxPlayers);
+        if(PhotonNetwork.PlayerList.Length == PhotonNetwork.CurrentRoom.MaxPlayers)
         {
             Debug.LogError("PlayerFull");
             PhotonNetwork.LoadLevel(1);
