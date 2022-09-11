@@ -32,10 +32,8 @@ public class ChracterStream : MonoBehaviourPunCallbacks, IPunObservable
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        //Debug.Log("Stream");
         if (stream.IsWriting)
         {
-            Debug.LogError("Write");
             stream.SendNext(CurrentPos);
             stream.SendNext(CurrentRot);
             stream.SendNext(starterAssetsInputs.move);
@@ -43,10 +41,8 @@ public class ChracterStream : MonoBehaviourPunCallbacks, IPunObservable
             stream.SendNext(starterAssetsInputs.jump);
             stream.SendNext(starterAssetsInputs.sprint);
         }
-        //if(stream.IsReading)
         else
         {
-            Debug.LogErrorFormat("Read");
             NextPos = (Vector3)stream.ReceiveNext();
             NextRot = (Quaternion)stream.ReceiveNext();
             starterAssetsInputs.move = (Vector2)stream.ReceiveNext();

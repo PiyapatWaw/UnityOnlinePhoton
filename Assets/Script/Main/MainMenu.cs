@@ -71,13 +71,11 @@ public class MainMenu : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        Debug.LogErrorFormat("OnJoinedRoom {0} count {1}", PhotonNetwork.CurrentRoom.Name, PhotonNetwork.PlayerList.Length);
         CheckPlayerFull();
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
-        Debug.LogError("OnJoinRandomFailed");
         CreateRoom();
     }
 
@@ -121,7 +119,6 @@ public class MainMenu : MonoBehaviourPunCallbacks
         LobbyPanel.UpdateRoom(PhotonNetwork.PlayerList.Length, PhotonNetwork.CurrentRoom.MaxPlayers);
         if(PhotonNetwork.PlayerList.Length == PhotonNetwork.CurrentRoom.MaxPlayers)
         {
-            Debug.LogError("PlayerFull");
             PhotonNetwork.LoadLevel(1);
         }
     }

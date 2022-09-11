@@ -46,6 +46,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunInstantiateMagicCall
         }
         SkinNetwork skinNetwork = (SkinNetwork)info.photonView.InstantiationData[0];
         SkinManager.SetupSkin(skinNetwork.Colorlist);
+        gameObject.name += nickname;
     }
 
     private void Update()
@@ -61,9 +62,20 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunInstantiateMagicCall
         }
     }
 
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+    {
+        if (targetPlayer == player)
+        {
+            if (changedProps.ContainsKey(PropertiesKey.HP))
+            {
+                serverhp = (float)player.CustomProperties[PropertiesKey.HP];
+            }
+        }
+    }
+
     public void Takedamage(float value)
     {
-        hp -= Getfactor_Damaged(value);
+        hp -= (int)Getfactor_Damaged(value);
         if(hp<=0)
         {
             thirdPersonController.PlayDie();
